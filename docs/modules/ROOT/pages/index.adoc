@@ -1,5 +1,15 @@
 = yawol-controller
 
-yawol-controller is a Commodore component to manage yawol-controller.
+yawol-controller is a Commodore component to manage the https://github.com/stackitcloud/yawol[yawol-controller].
+
+yawol is an alternative lightweight controller to provision LoadBalancer services for clusters running on OpenStack.
+
+See the https://github.com/stackitcloud/yawol/tree/main?tab=readme-ov-file[upstream documentation] for details on the setup.
+
+[IMPORTANT]
+====
+The Commodore component only manages the Kubernetes component of yawol.
+Users must make sure that a suitable yawol image is available in OpenStack.
+====
 
 See the xref:references/parameters.adoc[parameters] reference for further details.
