@@ -1,0 +1,46 @@
+= yawol Architecture
+
+[abstract]
+This page gives a brief overview over the architecture of yawol.
+
+https://github.com/stackitcloud/yawol[yawol] consists of two main components:
+
+1. A Kubernetes controller which interacts with OpenStack to provision lightweight VMs to route traffic from floating IPs into the cluster.
+2. An alpine Linux-based VM image which
++
+* runs a custom binary (`yawollet`) that fetches information from the cluster hosting the controller
+* runs envoy to route traffic from the floating IP into the cluster
+
+.yawol networking diagram
+[ditaa]
+....
+                             |
+                             |floating IP
+                             v
+                    /--------*--------\
+ dmz network        |                 |
+--------------------| yawollet / envoy|------------------------
+cluster network     |                 |
+                    \--------*--------/
+                             |internal IP
+                             |
+              +--------------+--------------+
+              |              |              |
+              v              v              v
+       /------------\ /------------\ /------------\
+       | cluster VM | | cluster VM | | cluster VM | ...
+       \------------/ \------------/ \------------/
+....
+
+The yawol-cloud-controller creates a `LoadBalancer`, `LoadBalancerSet` and `LoadBalancerMachine` custom resource for each LoadBalancer service.
+
+The yawol-controller reconciles the custom resources, and provisions a floating IP, security group and yawollet instance for each service of `type: LoadBalancer` in the cluster.
+Additionally, the controller provisions a ServiceAccount and rolebindings for each yawollet so that the yawollet can access the cluster API to watch for updates to the service for which it was provisioned.
+
+The yawol-controller reconciles the `LoadBalancer` resource to manage the floating IP and security group for the service.
+Additionally, the yawol-controller creates a `LoadBalancerSet` associated with the `LoadBalancer` resource.
+The controller then creates a `LoadBalancerMachine` resource associated with the `LoadBalancerSet`.
+Finally, the `LoadBalancerMachine` resource is reconciled to provision a yawollet VM in OpenStack.
+
+Once the VM is running, the yawollet accesses the cluster (authenticating through the ServiceAccount that was provisioned) to update its own status in the `LoadBalancerMachine` custom resource.
+Additionally, the yawollet sets up a watch for the `LoadBalancer` custom resource which it is associated so that it can update the Envoy config on the VM when the `LoadBalancer` resource changes.

@@ -12,4 +12,6 @@ The Commodore component only manages the Kubernetes component of yawol.
 Users must make sure that a suitable yawol image is available in OpenStack.
 ====
 
-See the xref:references/parameters.adoc[parameters] reference for further details.
+See the xref:references/architecture.adoc[architecture overview] for a description on how yawol works.
+
+See the xref:references/parameters.adoc[parameters] reference for further details on how to configure the component.
