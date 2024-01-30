@@ -38,7 +38,14 @@ local openstack_credentials =
 
   kube.Secret(params.openstack.secret_name) {
     data:: {},
-    stringData: validate(params.openstack.config),
+    stringData: {
+      'cloudprovider.conf': std.manifestIni({
+        main: {},
+        sections: {
+          Global: validate(params.openstack.config),
+        },
+      }),
+    },
   };
 
 {
