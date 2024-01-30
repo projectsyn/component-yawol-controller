@@ -23,3 +23,9 @@ parameters:
           name: yawol-controller
           namespace: ${yawol_controller:namespace}
         output_path: yawol-controller/01_helm_chart
+  commodore:
+    postprocess:
+      filters:
+        - type: jsonnet
+          filter: postprocess/clean_helm_output.jsonnet
+          path: yawol-controller/01_helm_chart/yawol-controller/crds
