@@ -1,0 +1,5 @@
+= yawol-controller
+
+yawol-controller is a Commodore component to manage yawol-controller.
+
+See the xref:references/parameters.adoc[parameters] reference for further details.

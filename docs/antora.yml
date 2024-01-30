@@ -1,0 +1,6 @@
+name: yawol-controller
+title: yawol-controller
+version: master
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/partials/nav.adoc

@@ -1,0 +1,4 @@
+parameters:
+  yawol_controller:
+    =_metadata: {}
+    namespace: syn-yawol-controller
