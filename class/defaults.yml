@@ -26,3 +26,4 @@ parameters:
       yawolNetworkID: THE_CLUSTER_NETWORK_ID
       yawolFlavorID: THE_LB_VM_FLAVOR
       yawolImageID: THE_YAWOLLET_IMAGE_ID
+      yawolAPIHost: THE_K8S_API_URL

@@ -82,6 +82,8 @@ spec:
           env:
             - name: CLUSTER_NAMESPACE
               value: syn-yawol-controller
+            - name: API_ENDPOINT
+              value: THE_K8S_API_URL
           image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
           imagePullPolicy: Always
           name: yawol-controller-loadbalancermachine
