@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kubernetes
+    role: yawol-controller
+  name: yawol-controller
+  namespace: syn-yawol-controller
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: kubernetes
+      role: yawol-controller
+  template:
+    metadata:
+      labels:
+        app: kubernetes
+        role: yawol-controller
+    spec:
+      containers:
+        - args:
+            - -leader-elect
+            - -enable-loadbalancer-controller
+            - -error-backoff-base-delay=5ms
+            - -error-backoff-max-delay=1000s
+          env:
+            - name: CLUSTER_NAMESPACE
+              value: syn-yawol-controller
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          imagePullPolicy: Always
+          name: yawol-controller-loadbalancer
+          ports:
+            - containerPort: 8080
+              name: metrics
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+        - args:
+            - -leader-elect
+            - -enable-loadbalancerset-controller
+            - -error-backoff-base-delay=5ms
+            - -error-backoff-max-delay=1000s
+          env:
+            - name: CLUSTER_NAMESPACE
+              value: syn-yawol-controller
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          imagePullPolicy: Always
+          name: yawol-controller-loadbalancerset
+          ports:
+            - containerPort: 8081
+              name: metrics
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+        - args:
+            - -leader-elect
+            - -enable-loadbalancermachine-controller
+            - -error-backoff-base-delay=5ms
+            - -error-backoff-max-delay=1000s
+          env:
+            - name: CLUSTER_NAMESPACE
+              value: syn-yawol-controller
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          imagePullPolicy: Always
+          name: yawol-controller-loadbalancermachine
+          ports:
+            - containerPort: 8082
+              name: metrics
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+      restartPolicy: Always
+      serviceAccountName: yawol-controller

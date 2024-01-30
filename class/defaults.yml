@@ -2,3 +2,27 @@ parameters:
   yawol_controller:
     =_metadata: {}
     namespace: syn-yawol-controller
+
+    charts:
+      yawol-controller:
+        source: https://stackitcloud.github.io/yawol
+        version: v0.20.0
+
+    openstack:
+      secret_name: openstack-credentials
+      # The contents of this parameter are written into a secret under key
+      # `cloudprovider.conf`.
+      # NOTE: users must set `auth-url`, `region`, `domain-name/domain-id` and
+      # `project-name/project-id`.
+      config:
+        username: ?{vaultkv:${cluster:tenant}/${cluster:name}/openstack/credentials/username}
+        password: ?{vaultkv:${cluster:tenant}/${cluster:name}/openstack/credentials/password}
+
+    helm_values:
+      namespace: ${yawol_controller:namespace}
+      yawolOSSecretName: openstack-credentials
+
+      yawolFloatingID: THE_FLOATING_NETWORK_ID
+      yawolNetworkID: THE_CLUSTER_NETWORK_ID
+      yawolFlavorID: THE_LB_VM_FLAVOR
+      yawolImageID: THE_YAWOLLET_IMAGE_ID

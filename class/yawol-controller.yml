@@ -1,5 +1,11 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: helm
+        source: ${yawol_controller:charts:yawol-controller:source}
+        chart_name: yawol-controller
+        version: ${yawol_controller:charts:yawol-controller:version}
+        output_path: ${_base_directory}/helmcharts/yawol-controller/${yawol_controller:charts:yawol-controller:version}
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet
@@ -9,3 +15,11 @@ parameters:
           - ${_base_directory}/component/main.jsonnet
         input_type: jsonnet
         output_path: yawol-controller/
+      - input_type: helm
+        input_paths:
+          - ${_base_directory}/helmcharts/yawol-controller/${yawol_controller:charts:yawol-controller:version}
+        helm_values: ${yawol_controller:helm_values}
+        helm_params:
+          name: yawol-controller
+          namespace: ${yawol_controller:namespace}
+        output_path: yawol-controller/01_helm_chart
