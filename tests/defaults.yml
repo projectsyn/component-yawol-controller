@@ -1,3 +1,10 @@
 # Overwrite parameters here
 
-# parameters: {...}
+parameters:
+  yawol_controller:
+    openstack:
+      config:
+        auth-url: https://keystone.openstack.example.com/v3
+        region: THE_REGION
+        domain-name: THE_DOMAIN
+        project-name: THE_PROJECT

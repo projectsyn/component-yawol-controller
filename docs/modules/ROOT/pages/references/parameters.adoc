@@ -10,10 +10,113 @@ default:: `syn-yawol-controller`
 
 The namespace in which to deploy this component.
 
+== `charts`
 
-== Example
+[horizontal]
+type:: dict
+default:: See https://github.com/projectsyn/component-yawol-controller/blob/master/class/defaults.yml[`class/defaults.yml`]
 
-[source,yaml]
-----
-namespace: example-namespace
-----
+This parameter defines the Helm charts used by the component.
+
+
+== `openstack`
+
+This parameter holds the secret name and contents of the OpenStack credentials secret used by the yawol controllers.
+
+=== `openstack.secret_name`
+
+[horizontal]
+type:: string
+default:: `openstack-credentials`
+
+The name of the Secret holding the credentials.
+
+NOTE: The component sets the value of this parameter as Helm value `yawolOSSecretName`.
+
+=== `config`
+
+[horizontal]
+type:: dict
+default:: See https://github.com/projectsyn/component-yawol-controller/blob/master/class/defaults.yml[`class/defaults.yml`]
+
+This parameter holds the OpenStack credentials, and environment data.
+The component will validate that the mandatory fields are set.
+
+The following fields must be provided by the user:
+
+* The OpenStack authentication URL including the API version.
+For example `\https://keystone.openstack.example.com/v3`.
+The key must be `auth-url`.
+* The OpenStack domain in which the controller should create resources.
+Either key `domain-name` or `domain-id` must be present, but not both.
+* The OpenStack project in which the controller should create resources.
+Either key `project-name` or `project-id` must be present, but not both.
+* The OpenStack region in which the controller should create resources.
+The key must be `region`.
+
+The component defaults set secret references for mandatory fields `username` and `password`.
+
+The component will render the contents of this parameter as an Ini file in the credentials secret.
+The rendered config is put into the secret in key `cloud-provider.conf`.
+
+=== Example
+
+The component config
+
+```yaml
+parameters:
+  yawol_controller:
+    secret_name: openstack-credentials
+    openstack:
+      config:
+        auth-url: https://keystone.openstack.example.com/v3
+        region: THE_REGION
+        domain-name: THE_DOMAIN
+        project-name: THE_PROJECT
+        username: ?{vaultkv:${cluster:tenant}/${cluster:name}/openstack/credentials/username}
+        password: ?{vaultkv:${cluster:tenant}/${cluster:name}/openstack/credentials/password}
+```
+
+is translated to the following Kubernetes secret:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations: {}
+  labels:
+    name: openstack-credentials
+  name: openstack-credentials
+stringData:
+  cloudprovider.conf: |
+    [Global]
+    auth-url = https://keystone.openstack.example.com/v3
+    domain-name = THE_DOMAIN
+    password = t-silent-test-1234/c-green-test-1234/openstack/credentials/password
+    project-name = THE_PROJECT
+    region = THE_REGION
+    username = t-silent-test-1234/c-green-test-1234/openstack/credentials/username
+type: Opaque
+```
+
+== `helm_values`
+
+[horizontal]
+type:: dict
+default:: See https://github.com/projectsyn/component-yawol-controller/blob/master/class/defaults.yml[`class/defaults.yml`]
+
+The Helm values to use when rendering the yawol-controller Helm chart.
+
+The following Helm values must be set for the controller to work correctly:
+
+* `yawolFloatingID` to the UUID of the OpenStack network in which the floating IPs for the LoadBalancer services should be allocated.
+* `yawolNetworkID` to the UUID of the OpenStack network in which the cluster VMs are running.
+* `yawolFlavorID` to the UUID of the default compute instance flavor to use for the LoadBalancer router VMs.
+* `yawolImageID` to the image for the router VMs.
+See the https://github.com/stackitcloud/yawol/tree/main?tab=readme-ov-file#yawol-openstack-image[upstream documentation] for instructions on how to build the image.
+* `yawolAPIHost` to the Kubernetes API URL of the cluster hosting the controller.
+The provided DNS record must be resolvable by the router VMs.
+
+See the https://github.com/stackitcloud/yawol/tree/main?tab=readme-ov-file#cluster-installation[upstream documentation] for more details on configuring the yawol-controller.
+
+See the https://github.com/stackitcloud/yawol/tree/main/charts/yawol-controller[Helm chart documentation] for all available Helm values.
