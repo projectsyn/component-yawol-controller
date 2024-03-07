@@ -28,7 +28,7 @@ spec:
           env:
             - name: CLUSTER_NAMESPACE
               value: syn-yawol-controller
-          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.21.3
           imagePullPolicy: Always
           name: yawol-controller-loadbalancer
           ports:
@@ -55,7 +55,7 @@ spec:
           env:
             - name: CLUSTER_NAMESPACE
               value: syn-yawol-controller
-          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.21.3
           imagePullPolicy: Always
           name: yawol-controller-loadbalancerset
           ports:
@@ -84,7 +84,7 @@ spec:
               value: syn-yawol-controller
             - name: API_ENDPOINT
               value: THE_K8S_API_URL
-          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.21.3
           imagePullPolicy: Always
           name: yawol-controller-loadbalancermachine
           ports:

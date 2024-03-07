@@ -36,7 +36,7 @@ spec:
               value: THE_LB_VM_FLAVOR
             - name: IMAGE_ID
               value: THE_YAWOLLET_IMAGE_ID
-          image: ghcr.io/stackitcloud/yawol/yawol-cloud-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-cloud-controller:v0.21.3
           imagePullPolicy: IfNotPresent
           name: yawol-cloud-controller
           ports:
