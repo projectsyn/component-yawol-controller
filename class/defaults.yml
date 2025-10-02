@@ -1,6 +1,7 @@
 parameters:
   yawol_controller:
-    =_metadata: {}
+    =_metadata:
+      multi_tenant: true
     namespace: syn-yawol-controller
 
     charts:
