@@ -21,14 +21,17 @@ spec:
     spec:
       containers:
         - args:
-            - -leader-elect
-            - -enable-loadbalancer-controller
-            - -error-backoff-base-delay=5ms
-            - -error-backoff-max-delay=1000s
+            - --leader-elect
+            - --enable-loadbalancer-controller
+            - --error-backoff-base-delay=5ms
+            - --error-backoff-max-delay=1000s
+            - --zap-stacktrace-level=error
+            - --zap-log-level=info
+            - --zap-encoder=console
           env:
             - name: CLUSTER_NAMESPACE
               value: syn-yawol-controller
-          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.25.0
           imagePullPolicy: Always
           name: yawol-controller-loadbalancer
           ports:
@@ -48,14 +51,17 @@ spec:
                 - ALL
             runAsNonRoot: true
         - args:
-            - -leader-elect
-            - -enable-loadbalancerset-controller
-            - -error-backoff-base-delay=5ms
-            - -error-backoff-max-delay=1000s
+            - --leader-elect
+            - --enable-loadbalancerset-controller
+            - --error-backoff-base-delay=5ms
+            - --error-backoff-max-delay=1000s
+            - --zap-stacktrace-level=error
+            - --zap-log-level=info
+            - --zap-encoder=console
           env:
             - name: CLUSTER_NAMESPACE
               value: syn-yawol-controller
-          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.25.0
           imagePullPolicy: Always
           name: yawol-controller-loadbalancerset
           ports:
@@ -75,16 +81,19 @@ spec:
                 - ALL
             runAsNonRoot: true
         - args:
-            - -leader-elect
-            - -enable-loadbalancermachine-controller
-            - -error-backoff-base-delay=5ms
-            - -error-backoff-max-delay=1000s
+            - --leader-elect
+            - --enable-loadbalancermachine-controller
+            - --error-backoff-base-delay=5ms
+            - --error-backoff-max-delay=1000s
+            - --zap-stacktrace-level=error
+            - --zap-log-level=info
+            - --zap-encoder=console
           env:
             - name: CLUSTER_NAMESPACE
               value: syn-yawol-controller
             - name: API_ENDPOINT
               value: THE_K8S_API_URL
-          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-controller:v0.25.0
           imagePullPolicy: Always
           name: yawol-controller-loadbalancermachine
           ports:
