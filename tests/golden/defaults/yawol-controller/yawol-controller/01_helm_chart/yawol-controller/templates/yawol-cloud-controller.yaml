@@ -22,7 +22,10 @@ spec:
     spec:
       containers:
         - args:
-            - -leader-elect
+            - --leader-elect
+            - --zap-stacktrace-level=error
+            - --zap-log-level=info
+            - --zap-encoder=console
           env:
             - name: CLUSTER_NAMESPACE
               value: syn-yawol-controller
@@ -36,7 +39,7 @@ spec:
               value: THE_LB_VM_FLAVOR
             - name: IMAGE_ID
               value: THE_YAWOLLET_IMAGE_ID
-          image: ghcr.io/stackitcloud/yawol/yawol-cloud-controller:v0.20.0
+          image: ghcr.io/stackitcloud/yawol/yawol-cloud-controller:v0.25.0
           imagePullPolicy: IfNotPresent
           name: yawol-cloud-controller
           ports:

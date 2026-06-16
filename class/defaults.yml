@@ -7,7 +7,7 @@ parameters:
     charts:
       yawol-controller:
         source: https://stackitcloud.github.io/yawol
-        version: v0.20.0
+        version: 0.25.0
 
     openstack:
       secret_name: openstack-credentials
